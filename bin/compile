@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# bin/compile <build-dir> <cache-dir>
+# bin/compile <build-dir> <cache-dir> <env-dir>
 
 BUILD_DIR=$1
 CACHE_DIR=$2
@@ -29,7 +29,8 @@ export_env_dir() {
     done
   fi
 }
-export_env_dir
+
+export_env_dir $ENV_DIR
 
 echo "-----> Downloading mono to ${CACHE_DIR}/$STACK/vendor"
 if [ ! -d ${CACHE_DIR}/$STACK/vendor/mono ]; then
