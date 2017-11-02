@@ -1,8 +1,9 @@
 #!/usr/bin/env bash
-# bin/compile <build-dir> <cache-dir>
+# bin/compile <build-dir> <cache-dir> <env-dir>
 
 BUILD_DIR=$1
 CACHE_DIR=$2
+ENV_DIR=$3
 LP_DIR=`cd $(dirname $0); cd ..; pwd`
 
 # fail fast
@@ -10,11 +11,26 @@ set -e
 
 MONO3_VM_BINARY="https://github.com/SuaveIO/mono-builder/releases/download/0.0.9/mono-4.4.2.11.tar.gz"
 NUGET_BINARY="https://dist.nuget.org/win-x86-commandline/latest/nuget.exe"
-PAKET_BINARY="https://github.com/fsprojects/Paket/releases/download/3.13.3/paket.exe"
+PAKET_BINARY="https://github.com/fsprojects/Paket/releases/download/5.120.0/paket.exe"
 
 NUGET="${BUILD_DIR}/vendor/mono/bin/nuget.exe"
 MOZROOT="${BUILD_DIR}/vendor/mono/lib/mono/4.5/mozroots.exe"
 XBUILD="${BUILD_DIR}/vendor/mono/lib/mono/4.5/xbuild.exe"
+
+export_env_dir() {
+  env_dir=$1
+  whitelist_regex=${2:-''}
+  blacklist_regex=${3:-'^(PATH|GIT_DIR|CPATH|CPPATH|LD_PRELOAD|LIBRARY_PATH)$'}
+  if [ -d "$env_dir" ]; then
+    for e in $(ls $env_dir); do
+      echo "$e" | grep -E "$whitelist_regex" | grep -qvE "$blacklist_regex" &&
+      export "$e=$(cat $env_dir/$e)"
+      :
+    done
+  fi
+}
+
+export_env_dir $ENV_DIR
 
 echo "-----> Downloading mono to ${CACHE_DIR}/$STACK/vendor"
 if [ ! -d ${CACHE_DIR}/$STACK/vendor/mono ]; then
