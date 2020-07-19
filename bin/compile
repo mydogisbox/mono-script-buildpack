@@ -11,7 +11,7 @@ set -e
 
 MONO3_VM_BINARY="https://github.com/mydogisbox/mono-builder/releases/download/0.0.10/mono-5.4.1.7.tar.gz"
 NUGET_BINARY="https://dist.nuget.org/win-x86-commandline/latest/nuget.exe"
-PAKET_BINARY="https://github.com/fsprojects/Paket/releases/download/5.142.0/paket.exe"
+PAKET_BINARY="https://github.com/fsprojects/Paket/releases/download/5.247.4/paket.exe"
 
 NUGET="${BUILD_DIR}/vendor/mono/bin/nuget.exe"
 MOZROOT="${BUILD_DIR}/vendor/mono/lib/mono/4.5/mozroots.exe"
